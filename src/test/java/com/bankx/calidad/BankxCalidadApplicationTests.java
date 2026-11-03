@@ -1,4 +1,4 @@
-package com.bankx_calidad;
+package com.bankx.calidad;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

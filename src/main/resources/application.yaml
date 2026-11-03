@@ -1,3 +1,6 @@
 spring:
   application:
     name: bankx-calidad
+
+server:
+  port: 8084
