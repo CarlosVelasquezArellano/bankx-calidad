@@ -9,12 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BankxCalidadApplication {
 
-	/**
-	 * Inicia la aplicacion Spring Boot.
-	 *
-	 * @param args argumentos recibidos desde la linea de comandos
-	 */
-	public static void main(String[] args) {
-		SpringApplication.run(BankxCalidadApplication.class, args);
-	}
+  /**
+   * Inicia la aplicacion Spring Boot.
+   *
+   * @param args argumentos recibidos desde la linea de comandos
+   */
+  public static void main(String[] args) {
+    SpringApplication.run(BankxCalidadApplication.class, args);
+  }
 }
