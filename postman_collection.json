@@ -1,0 +1,241 @@
+{
+  "info": {
+    "_postman_id": "b6c4756a-4c3e-4e8d-a5a2-f253254a24de",
+    "name": "BankX Calidad - Transacciones",
+    "description": "Pruebas del endpoint reactivo para simular débitos y créditos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8084"
+    }
+  ],
+  "item": [
+    {
+      "name": "Débito exitoso",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"DEBIT\",\n  \"amount\": 100,\n  \"balance\": 500\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/transactions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "transactions"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Responde 200 y calcula el saldo del débito', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.json()).to.deep.equal({ status: 'OK', newBalance: 400 });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crédito exitoso",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"CREDIT\",\n  \"amount\": 1500,\n  \"balance\": 500\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/transactions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "transactions"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Responde 200 y calcula el saldo del crédito', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.json()).to.deep.equal({ status: 'OK', newBalance: 2000 });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Débito rechazado por límite de riesgo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"DEBIT\",\n  \"amount\": 1001,\n  \"balance\": 5000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/transactions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "transactions"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Rechaza débitos mayores a 1000', function () {",
+              "    pm.response.to.have.status(400);",
+              "    pm.expect(pm.response.json()).to.deep.equal({ status: 'ERROR', message: 'risk_rejected' });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Débito rechazado por fondos insuficientes",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"DEBIT\",\n  \"amount\": 200,\n  \"balance\": 100\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/transactions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "transactions"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Rechaza el débito si no hay saldo suficiente', function () {",
+              "    pm.response.to.have.status(400);",
+              "    pm.expect(pm.response.json()).to.deep.equal({ status: 'ERROR', message: 'insufficient_funds' });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Operación rechazada por tipo inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"TRANSFER\",\n  \"amount\": 100,\n  \"balance\": 500\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/transactions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "transactions"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Rechaza tipos de operación desconocidos', function () {",
+              "    pm.response.to.have.status(400);",
+              "    pm.expect(pm.response.json()).to.deep.equal({ status: 'ERROR', message: 'invalid_type' });",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
