@@ -117,6 +117,7 @@
 									<!-- Se excluye únicamente la clase de arranque de esta validación. -->
 									<excludes>
 										<exclude>*.BankxApplication</exclude>
+										<exclude>*.BankxCalidadApplication</exclude>
 									</excludes>
 									<limits>
 										<limit>
