@@ -36,7 +36,7 @@ public class TransactionController {
    * @return respuesta exitosa o error de validacion
    */
   @PostMapping
-  public Mono<ResponseEntity>> create(
+  public Mono<ResponseEntity<Map<String, Object>>> create(
       @RequestBody TransactionRequest request) {
     return transactionService.calculate(
             request.type(), request.amount(), request.balance())
